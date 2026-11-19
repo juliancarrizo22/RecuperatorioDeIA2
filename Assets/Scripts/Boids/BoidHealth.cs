@@ -24,12 +24,17 @@ public class BoidHealth : MonoBehaviour
         if (IsDead)
             return;
 
-    CurrentHealth -= damage;
+        CurrentHealth -= damage;
 
         if (CurrentHealth <= 0)
         {
             CurrentHealth = 0;
             IsDead = true;
+
+            AgentStateMonitor.Instance?.UpdateAgentState(
+                gameObject,
+                "Dead"
+            );
 
             if (visualFeedback != null)
                 visualFeedback.ShowDead();
@@ -45,6 +50,11 @@ public class BoidHealth : MonoBehaviour
     {
         CurrentHealth = maxHealth;
         IsDead = false;
+
+        AgentStateMonitor.Instance?.UpdateAgentState(
+            gameObject,
+            "Alive"
+        );
 
         if (visualFeedback != null)
             visualFeedback.ShowAlive();

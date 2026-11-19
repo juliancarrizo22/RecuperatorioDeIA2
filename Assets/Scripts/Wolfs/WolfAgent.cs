@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public enum WolfState
@@ -134,6 +133,8 @@ public class WolfAgent : MonoBehaviour
         }
 
         ChangeState(WolfState.Patrol);
+        AgentStateMonitor.Instance?.RegisterAgent(gameObject,"Wolf",currentState.ToString());
+
         if (wolfVisualFeedback != null)
             wolfVisualFeedback.SetState(currentState);
     }
@@ -142,6 +143,7 @@ public class WolfAgent : MonoBehaviour
     {
         if (WolfManager.Instance != null)
             WolfManager.Instance.UnregisterWolf(this);
+        AgentStateMonitor.Instance?.UnregisterAgent(gameObject);
     }
 
     private void Update()
@@ -268,6 +270,8 @@ public class WolfAgent : MonoBehaviour
 
         WolfState previousState = currentState;
         currentState = newState;
+
+        AgentStateMonitor.Instance?.UpdateAgentState(gameObject,newState.ToString());
 
         wolfNavigation.ResetNavigation();
 

@@ -187,6 +187,7 @@ public class HunterAgent : MonoBehaviour
             TeleportTo(initialZoneTransform.position);
 
         ChangeState(HunterState.Search);
+        AgentStateMonitor.Instance?.RegisterAgent(gameObject,"Hunter",currentState.ToString());
     }
 
     private void Update()
@@ -215,6 +216,7 @@ public class HunterAgent : MonoBehaviour
             return;
 
         currentState = newState;
+        AgentStateMonitor.Instance?.UpdateAgentState(gameObject,newState.ToString());
 
         if (hunterNavigation != null)
             hunterNavigation.ClearPath();
@@ -651,5 +653,9 @@ public class HunterAgent : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, gatherDistance);
 
-    }    
+    }
+    private void OnDestroy()
+    {
+        AgentStateMonitor.Instance?.UnregisterAgent(gameObject);
+    }
 }

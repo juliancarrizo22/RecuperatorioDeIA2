@@ -71,6 +71,7 @@ public class BoidAgent : MonoBehaviour
     private void Start()
     {
         perceptionTimer = perceptionInterval;
+        AgentStateMonitor.Instance?.RegisterAgent(gameObject,"Boid",health != null && health.IsDead ? "Dead" : "Alive");
     }
 
     public void InitializeMovement()
@@ -250,6 +251,11 @@ public class BoidAgent : MonoBehaviour
             force.z += 1f;
 
         return boidSteering.SteerTowards(force);
+    }
+
+    private void OnDestroy()
+    {
+        AgentStateMonitor.Instance?.UnregisterAgent(gameObject);
     }
 }
 
